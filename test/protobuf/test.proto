@@ -1,0 +1,48 @@
+syntax = "proto3";  //声明protobuf的版本
+package xcg;        //声明代码所在的包，相当于cpp的namespace
+
+option cc_generic_services = true;
+
+message ResultCode
+{
+    int32 errcode = 1;//错误码
+    bytes errmsg = 2;//错误消息
+}
+//定义登录请求消息类型
+message LoginRequest
+{
+    string name = 1;//数字1不代表字符串的值，而是声明此属性为第几个字段
+    string pwd = 2;
+}
+//定义登录响应消息类型
+message LoginResponse
+{
+    ResultCode result = 1;
+    bool success = 2; //标志登录是否成功
+}
+message GetFriendListsRequest
+{
+    uint32 userid = 1;
+
+}
+message User
+{
+    bytes name = 1;
+    uint32 age = 2;
+    enum Sex
+    {
+        MAN = 0;
+        WOMAN = 1;
+    }
+    Sex sex = 3;
+}
+message GetFriendListsResponse
+{
+    ResultCode result = 1;
+    repeated User friend_list = 2; // 列表（数组）类型
+}
+service UserServiceRpc
+{
+    rpc Login(LoginRequest) returns(LoginResponse);
+    rpc GetFriendLists(GetFriendListsRequest) returns(GetFriendListsResponse);
+}
