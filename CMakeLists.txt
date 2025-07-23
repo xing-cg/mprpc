@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 project(mprpc)
 
+find_package(Protobuf REQUIRED)  # 确保找到 Protobuf
+include_directories(${Protobuf_INCLUDE_DIRS})
+
+
+
 # 生成debug版本，可以进行gdb调试
 set(CMAKE_BUILD_TYPE "Debug")
 

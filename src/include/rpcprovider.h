@@ -27,4 +27,6 @@ private:
     // 已建立连接的用户的读写事件回调
     // std::function<void (const TcpConnectionPtr&, Buffer*, Timestamp)>
     void onMessage(const muduo::net::TcpConnectionPtr&, muduo::net::Buffer*, muduo::Timestamp);
+    // Closure 的回调操作，用于序列化rpc的响应和网络发送
+    void SendRpcResponse(const muduo::net::TcpConnectionPtr&, google::protobuf::Message*);
 };
