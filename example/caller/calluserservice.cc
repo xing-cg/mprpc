@@ -2,6 +2,8 @@
 #include "mprpcapplication.h"
 #include "user.pb.h"
 #include "mprpcchannel.h"
+#include "mprpccontroller.h"
+#include "string.h"
 int main(int argc, char ** argv)
 {
     // 整个程序启动以后，想使用mprpc框架来享受rpc服务调用，一定需要先调用框架的初始化函数（只初始化一次）
@@ -18,17 +20,24 @@ int main(int argc, char ** argv)
     xcg::UserServiceRpc_Stub stub(new MprpcChannel());
 
     // 发起rpc方法的调用。
-    stub.Login(nullptr, &request, &response, nullptr);
+    MprpcController controller;
+    stub.Login(&controller, &request, &response, nullptr);
     
-    // 一次rpc调用完成，读调用的结果
-    if (response.result().errcode() == 0)
+    if (controller.Failed()) // rpc调用过程中有异常，response没有填入数据
     {
-        // 成功
-        std::cout << "rpc login response success: " << response.success() << std::endl;
+        std::cout << controller.ErrorText() << std::endl;
     }
-    else
+    else // 一次rpc调用结束，返回了，读返回的response结果
     {
-        std::cout << "rpc login response error: " << response.result().errmsg() << std::endl;
+        if (response.result().errcode() == 0)
+        {
+            // 成功
+            std::cout << "rpc login response success: " << response.success() << std::endl;
+        }
+        else
+        {
+            std::cout << "rpc login response error: " << response.result().errmsg() << std::endl;
+        }
     }
     return 0;
 }

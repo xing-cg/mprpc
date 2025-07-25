@@ -124,7 +124,7 @@ void RpcProvider::onMessage(const muduo::net::TcpConnectionPtr& conn, muduo::net
     google::protobuf::Service *service = service_it->second.m_service;
     const google::protobuf::MethodDescriptor *method = method_it->second;
 
-    // 生成rpc方法调用的请求request和响应response参数
+    // 生成rpc方法调用的请求request和响应response
     google::protobuf::Message *request = service->GetRequestPrototype(method).New();
     if (!request->ParseFromString(args_str))
     {
